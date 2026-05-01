@@ -16,7 +16,7 @@ class JobHistoryViewModel(application: Application) : AndroidViewModel(applicati
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
+            initialValue = emptyList(),
         )
 
     init {
@@ -26,7 +26,7 @@ class JobHistoryViewModel(application: Application) : AndroidViewModel(applicati
             jobHistory.collect { jobs ->
                 // Only alert if there are jobs and it's an "occasional" check
                 if (jobs.isNotEmpty()) {
-                    val unpaidJobs = jobs.filter { it.paymentStatus != "PAID" && (it.totalAmount - it.amountPaid) > 0 }
+                    val unpaidJobs = jobs.filter { (it.paymentStatus != "PAID") && ((it.totalAmount - it.amountPaid) > 0) }
                     if (unpaidJobs.size > 3) { // Only alert if more than 3 customers owe money (less frequent)
                         notificationHelper.showPaymentReminderNotification("Multiple Customers", unpaidJobs.sumOf { it.totalAmount - it.amountPaid })
                     } else if (unpaidJobs.size == 1) {

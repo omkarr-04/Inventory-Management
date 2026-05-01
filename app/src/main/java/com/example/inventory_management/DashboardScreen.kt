@@ -27,7 +27,7 @@ fun DashboardScreen(
     onNavigateToInventory: () -> Unit,
     onNavigateToHistory: () -> Unit,
     inventoryViewModel: InventoryViewModel = viewModel(),
-    historyViewModel: JobHistoryViewModel = viewModel()
+    historyViewModel: JobHistoryViewModel = viewModel(),
 ) {
     val items by inventoryViewModel.allItems.collectAsStateWithLifecycle()
     val jobs by historyViewModel.jobHistory.collectAsStateWithLifecycle()
@@ -50,14 +50,14 @@ fun DashboardScreen(
     Scaffold(
         topBar = {
             LargeTopAppBar(title = { Text("Shop Dashboard", fontWeight = FontWeight.Bold) })
-        }
+        },
     ) { padding ->
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(16.dp),
             modifier = Modifier.padding(padding),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             item {
                 StatCard(
@@ -65,7 +65,7 @@ fun DashboardScreen(
                     value = CurrencyUtils.formatCurrency(todayRevenue),
                     icon = Icons.Default.AccountBalanceWallet,
                     color = MaterialTheme.colorScheme.primary,
-                    onClick = onNavigateToHistory
+                    onClick = onNavigateToHistory,
                 )
             }
             item {
@@ -74,34 +74,34 @@ fun DashboardScreen(
                     value = CurrencyUtils.formatCurrency(pendingPayments),
                     icon = Icons.Default.Warning,
                     color = Color(0xFFD32F2F),
-                    onClick = onNavigateToHistory
+                    onClick = onNavigateToHistory,
                 )
             }
             item {
                 StatCard(
                     title = "Inventory Items",
-                    value = "$totalParts",
+                    value = totalParts.toString(),
                     icon = Icons.Default.Inventory2,
                     color = MaterialTheme.colorScheme.secondary,
-                    onClick = onNavigateToInventory
+                    onClick = onNavigateToInventory,
                 )
             }
             item {
                 StatCard(
                     title = "Low Stock",
-                    value = "$lowStockCount",
+                    value = lowStockCount.toString(),
                     icon = Icons.Default.Warning,
                     color = if (lowStockCount > 0) Color(0xFFF57C00) else Color.Gray,
-                    onClick = onNavigateToInventory
+                    onClick = onNavigateToInventory,
                 )
             }
             item {
                 StatCard(
                     title = "Jobs Today",
-                    value = "${todayJobs.size}",
+                    value = todayJobs.size.toString(),
                     icon = Icons.Default.Build,
                     color = MaterialTheme.colorScheme.tertiary,
-                    onClick = onNavigateToHistory
+                    onClick = onNavigateToHistory,
                 )
             }
         }
@@ -114,7 +114,7 @@ fun StatCard(title: String, value: String, icon: ImageVector, color: Color, onCl
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() },
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
         Column(
             modifier = Modifier.padding(16.dp),

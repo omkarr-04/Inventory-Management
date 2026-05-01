@@ -8,4 +8,5 @@
 *.apk
 *.keystore
 app/google-services.json
-.DS_Store
+.env
+.fake

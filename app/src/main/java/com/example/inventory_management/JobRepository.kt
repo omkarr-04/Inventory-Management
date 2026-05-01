@@ -28,7 +28,7 @@ class JobRepository {
             // Step 1: Perform ALL reads first
             val partUpdates = job.partsUsed.map { usedPart ->
                 val partRef = partsCollection.document(usedPart.partId)
-                val snapshot = transaction.get(partRef) // READ
+                val snapshot = transaction[partRef] // READ
                 
                 val currentQty = snapshot.getLong("quantity") ?: 0L
                 val newQty = currentQty - usedPart.quantityUsed
@@ -57,7 +57,7 @@ class JobRepository {
     suspend fun updateJobPayment(jobId: String, amountPaid: Double, status: String) {
         jobsCollection.document(jobId).update(
             "amountPaid", amountPaid,
-            "paymentStatus", status
+            "paymentStatus", status,
         ).await()
     }
 

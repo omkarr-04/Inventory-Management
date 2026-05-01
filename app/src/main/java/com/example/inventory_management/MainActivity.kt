@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     val launcher = rememberLauncherForActivityResult(
                         contract = ActivityResultContracts.RequestPermission(),
-                        onResult = { isGranted ->
+                        onResult = { _ ->
                             // Permission handled
                         }
                     )
@@ -132,4 +132,3 @@ fun MainAppContainer() {
         }
     }
 }
-s

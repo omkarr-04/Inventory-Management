@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.util.UUID
 
 class JobViewModel : ViewModel() {
     private val jobRepository = JobRepository()
@@ -41,12 +40,14 @@ class JobViewModel : ViewModel() {
         if (existingIndex != -1) {
             currentList[existingIndex] = currentList[existingIndex].copy(quantityUsed = totalRequestedQty)
         } else {
-            currentList.add(UsedPart(
-                partId = item.id, 
-                partName = item.name, 
-                quantityUsed = quantityToAdd,
-                priceAtTime = item.price
-            ))
+            currentList.add(
+                UsedPart(
+                    partId = item.id,
+                    partName = item.name,
+                    quantityUsed = quantityToAdd,
+                    priceAtTime = item.price,
+                ),
+            )
         }
         
         _selectedParts.value = currentList
@@ -64,7 +65,7 @@ class JobViewModel : ViewModel() {
         amountPaidStr: String,
         laborChargeStr: String,
         gstPercentageStr: String,
-        onResult: (Boolean, String) -> Unit
+        onResult: (Boolean, String) -> Unit,
     ) {
         val currentParts = _selectedParts.value
         if (vehicleNumber.isBlank() || customerName.isBlank() || workDetails.isBlank() || currentParts.isEmpty()) {
@@ -108,7 +109,7 @@ class JobViewModel : ViewModel() {
                     totalAmount = totalAmount,
                     amountPaid = amountPaid,
                     paymentStatus = paymentStatus,
-                    status = "PENDING"
+                    status = "PENDING",
                 )
                 jobRepository.saveJobAndReduceStock(job)
                 _selectedParts.value = emptyList() 

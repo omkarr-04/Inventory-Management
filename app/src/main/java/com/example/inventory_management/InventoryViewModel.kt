@@ -17,7 +17,7 @@ class InventoryViewModel(application: Application) : AndroidViewModel(applicatio
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
+            initialValue = emptyList(),
         )
 
     init {
@@ -25,7 +25,7 @@ class InventoryViewModel(application: Application) : AndroidViewModel(applicatio
         viewModelScope.launch {
             allItems.collect { items ->
                 items.forEach { item ->
-                    if (item.quantity > 0 && item.quantity < item.lowStockThreshold) {
+                    if ((item.quantity > 0) && (item.quantity < item.lowStockThreshold)) {
                         notificationHelper.showLowStockNotification(item.name, item.quantity)
                     }
                 }
@@ -82,7 +82,7 @@ class InventoryViewModel(application: Application) : AndroidViewModel(applicatio
         viewModelScope.launch {
             try {
                 repository.deleteItem(item.id)
-            } catch (e: Exception) { }
+            } catch (_: Exception) { }
         }
     }
 
@@ -92,7 +92,7 @@ class InventoryViewModel(application: Application) : AndroidViewModel(applicatio
             viewModelScope.launch {
                 try {
                     repository.updateQuantity(item.id, newQuantity)
-                } catch (e: Exception) { }
+                } catch (_: Exception) { }
             }
         }
     }

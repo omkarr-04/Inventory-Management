@@ -14,7 +14,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -29,11 +28,11 @@ import com.example.inventory_management.ui.theme.LowStockRed
 @Composable
 fun InventoryScreen(
     onCreateJobClick: () -> Unit,
-    viewModel: InventoryViewModel = viewModel()
+    viewModel: InventoryViewModel = viewModel(),
 ) {
     val items by viewModel.allItems.collectAsStateWithLifecycle()
     var searchQuery by remember { mutableStateOf("") }
-    var showAddDialog by remember { mutableStateOf(false) }
+    var showAddDialog by remember { mutableStateOf(value = false) }
     var itemToDelete by remember { mutableStateOf<InventoryItem?>(null) }
     val context = LocalContext.current
 
@@ -53,7 +52,7 @@ fun InventoryScreen(
                         Text(
                             "Manage shop parts & stock",
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
                 },
@@ -63,7 +62,7 @@ fun InventoryScreen(
                     }
                 },
                 colors = TopAppBarDefaults.largeTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
+                    containerColor = MaterialTheme.colorScheme.background,
                 )
             )
         },
@@ -119,8 +118,9 @@ fun InventoryScreen(
                             item = item,
                             onDeleteClick = { itemToDelete = item },
                             onIncrease = { viewModel.updateQuantity(item, 1) },
-                            onDecrease = { viewModel.updateQuantity(item, -1) }
-                        )
+                        ) {
+                            viewModel.updateQuantity(item, -1)
+                        }
                     }
                 }
             }
@@ -129,13 +129,12 @@ fun InventoryScreen(
         if (showAddDialog) {
             AddItemDialog(
                 onDismiss = { showAddDialog = false },
-                onConfirm = { name, cat, qty, price, threshold ->
-                    viewModel.addItem(name, cat, qty, price, threshold) { success: Boolean, message: String ->
-                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-                        if (success) showAddDialog = false
-                    }
+            ) { name, cat, qty, price, threshold ->
+                viewModel.addItem(name, cat, qty, price, threshold) { success: Boolean, message: String ->
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                    if (success) showAddDialog = false
                 }
-            )
+            }
         }
 
         itemToDelete?.let { item ->
@@ -235,7 +234,7 @@ fun InventoryItemCard(
                         Icon(Icons.Default.Remove, contentDescription = null, modifier = Modifier.size(20.dp))
                     }
                     Text(
-                        text = "${item.quantity}",
+                        text = item.quantity.toString(),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(horizontal = 8.dp)

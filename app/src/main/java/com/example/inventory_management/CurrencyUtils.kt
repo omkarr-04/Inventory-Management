@@ -9,7 +9,7 @@ object CurrencyUtils {
      * Example: 1000.0 -> ₹1,000.00
      */
     fun formatCurrency(amount: Double): String {
-        val format = NumberFormat.getCurrencyInstance(Locale("en", "IN"))
+        val format = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("en-IN"))
         return format.format(amount)
     }
 }
